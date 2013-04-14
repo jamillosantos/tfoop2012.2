@@ -6,8 +6,7 @@ import java.util.List;
 import controllers.Actions;
 import exceptions.ValidationException;
 
-public class Product extends Model
-{
+public class Product extends Model implements IdentificableModel{
 	private int id;
 	private Category category;
 	private String name;

@@ -6,6 +6,7 @@ import java.util.List;
 import exceptions.ModelNotFoundException;
 import exceptions.ValidationException;
 
+import models.IdentificableModel;
 import models.Model;
 
 public class Controller<T extends Model>
@@ -20,12 +21,13 @@ public class Controller<T extends Model>
 	public Controller()
 	{
 		this.models = this.createModels();
+		this.lastId = 0;
 	}
 
 	/**
 	 * @return Retorna o inteiro identificador do último objeto inserido.
 	 */
-	public int getLastId()
+	protected int getLastId()
 	{
 		return this.lastId;
 	}
@@ -40,12 +42,16 @@ public class Controller<T extends Model>
 	protected List<T> createModels()
 	{
 		return new ArrayList<T>();
-	}
-
+	}	
+	
 	public void insert(T model) throws ValidationException
 	{
 		model.validate(Actions.insert);
 		this.models.add(model);
+		if(model instanceof IdentificableModel){
+			((IdentificableModel)model).setId(this.lastId);
+			this.lastId ++;
+		}
 	}
 
 	public void remove(T model) throws ModelNotFoundException

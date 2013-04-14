@@ -3,7 +3,7 @@ package models;
 import controllers.Actions;
 import exceptions.ValidationException;
 
-public class Table extends Model {
+public class Table extends Model implements IdentificableModel {
 
 	private int id;
 	

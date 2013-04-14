@@ -3,7 +3,7 @@ package models;
 import controllers.Actions;
 import exceptions.ValidationException;
 
-public class Order extends Model {
+public class Order extends Model implements IdentificableModel {
 
 	@Override
 	public void validate(Actions action) throws ValidationException {
