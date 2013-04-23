@@ -1,9 +1,10 @@
-package controllers;
+package foodlink.controllers;
 
 import java.util.List;
 
-import models.Category;
-import models.Product;
+import foodlink.models.Category;
+import foodlink.models.Product;
+
 
 class ProductByCategoryCollector extends Collector<Product>{
 	private Category category;

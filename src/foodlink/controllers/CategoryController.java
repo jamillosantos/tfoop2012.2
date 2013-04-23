@@ -1,6 +1,6 @@
-package controllers;
+package foodlink.controllers;
 
-import models.Category;
+import foodlink.models.Category;
 
 public class CategoryController extends Controller<Category> {
 	

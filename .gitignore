@@ -4,3 +4,5 @@
 *.jar
 *.war
 *.ear
+/FoodLink/nbproject/private/
+/FoodLink/build/

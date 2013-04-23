@@ -1,4 +1,4 @@
-package controllers;
+package foodlink.controllers;
 
 public enum Actions
 {

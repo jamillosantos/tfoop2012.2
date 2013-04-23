@@ -1,7 +1,7 @@
-package models;
+package foodlink.models;
 
-import controllers.Actions;
-import exceptions.ValidationException;
+import foodlink.controllers.Actions;
+import foodlink.exceptions.ValidationException;
 
 public class Order extends Model implements IdentificableModel {
 

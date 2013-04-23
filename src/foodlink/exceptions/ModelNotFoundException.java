@@ -1,6 +1,6 @@
-package exceptions;
+package foodlink.exceptions;
 
-import models.Model;
+import foodlink.models.Model;
 
 public class ModelNotFoundException extends Exception
 {

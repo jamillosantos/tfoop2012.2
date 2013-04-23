@@ -1,6 +1,6 @@
-package controllers;
+package foodlink.controllers;
 
-import models.User;
+import foodlink.models.User;
 
 public class UserController extends Controller<User> {
 	

@@ -1,13 +1,13 @@
-package controllers;
+package foodlink.controllers;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import exceptions.ModelNotFoundException;
-import exceptions.ValidationException;
+import foodlink.exceptions.ModelNotFoundException;
+import foodlink.exceptions.ValidationException;
+import foodlink.models.IdentificableModel;
+import foodlink.models.Model;
 
-import models.IdentificableModel;
-import models.Model;
 
 public class Controller<T extends Model>
 {
@@ -36,7 +36,7 @@ public class Controller<T extends Model>
 	 * Cria e retorna a instância da lista que será utilizada pela
 	 * variável models.
 	 * 
-	 * @see models
+	 * @see foodlink.models
 	 * @return
 	 */
 	protected List<T> createModels()

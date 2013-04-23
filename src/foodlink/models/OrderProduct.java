@@ -1,11 +1,11 @@
-package models;
+package foodlink.models;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Date;
 
-import controllers.Actions;
-import exceptions.ValidationException;
+import foodlink.controllers.Actions;
+import foodlink.exceptions.ValidationException;
 
 public class OrderProduct extends Model {
 

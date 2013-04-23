@@ -1,6 +1,6 @@
-package controllers;
+package foodlink.controllers;
 
-import models.Order;
+import foodlink.models.Order;
 
 public class OrderController extends Controller<Order> {
 

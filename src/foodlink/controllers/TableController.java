@@ -1,6 +1,6 @@
-package controllers;
+package foodlink.controllers;
 
-import models.Table;
+import foodlink.models.Table;
 
 public class TableController extends Controller<Table> {
 

@@ -1,4 +1,4 @@
-package exceptions;
+package foodlink.exceptions;
 
 import java.util.List;
 

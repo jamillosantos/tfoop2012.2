@@ -1,4 +1,4 @@
-package models;
+package foodlink.models;
 
 public interface IdentificableModel {
 	void setId(int id);
