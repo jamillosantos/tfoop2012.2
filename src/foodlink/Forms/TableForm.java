@@ -73,6 +73,11 @@ public class TableForm extends javax.swing.JFrame {
         });
 
         jbnApagar.setText("Apagar");
+        jbnApagar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jbnApagarActionPerformed(evt);
+            }
+        });
 
         tblListagem.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -99,9 +104,15 @@ public class TableForm extends javax.swing.JFrame {
         });
         tblListagem.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
         tblListagem.setFocusable(false);
+        tblListagem.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tblListagemMouseClicked(evt);
+            }
+        });
         jScrollPane1.setViewportView(tblListagem);
 
         tfMesa.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.NumberFormatter(new java.text.DecimalFormat("#####"))));
+        tfMesa.setText("efcdtd");
         tfMesa.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 tfMesaActionPerformed(evt);
@@ -155,7 +166,8 @@ public class TableForm extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jbnNovoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbnNovoActionPerformed
-        // TODO add your handling code here:
+        this.tfMesa.setText("");
+        this.setCurrentAction(Actions.insert);
     }//GEN-LAST:event_jbnNovoActionPerformed
 
     private void jbnSalvarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbnSalvarActionPerformed
@@ -197,6 +209,34 @@ public class TableForm extends javax.swing.JFrame {
     private void tfMesaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tfMesaActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_tfMesaActionPerformed
+
+    private void tblListagemMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblListagemMouseClicked
+       if (this.tblListagem.getSelectedRow() > -1)
+        {
+            this.tfMesa.setText(Integer.toString(Db.instance().getTable().get(this.tblListagem.getSelectedRow()).getCode()));
+            this.setCurrentAction(Actions.update);
+        }
+    }//GEN-LAST:event_tblListagemMouseClicked
+
+    private void jbnApagarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbnApagarActionPerformed
+      //Apaga itme selecionado na lista
+        if (this.tblListagem.getSelectedRow() > -1)
+        {
+            try
+            {
+                Db.instance().getTable().remove(Db.instance().getTable().get(this.tblListagem.getSelectedRow()));
+                ((DefaultTableModel)this.tblListagem.getModel()).removeRow(this.tblListagem.getSelectedRow());
+            }
+            catch (ModelNotFoundException e)
+            {
+                System.out.println(e.getMessage());
+            }
+        }
+        else
+        {
+            System.out.println("Deu néga!");
+        }
+    }//GEN-LAST:event_jbnApagarActionPerformed
     public Actions getCurrentAction(){
         return this.currentAction;
     }
