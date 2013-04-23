@@ -12,7 +12,7 @@ import foodlink.models.Model;
 public class Controller<T extends Model>
 {
 	/**
-	 * Guarda as instâncias de todos os modelos <T> criados.
+	 * Guarda as instï¿½ncias de todos os modelos <T> criados.
 	 */
 	private List<T> models;
 
@@ -25,7 +25,7 @@ public class Controller<T extends Model>
 	}
 
 	/**
-	 * @return Retorna o inteiro identificador do último objeto inserido.
+	 * @return Retorna o inteiro identificador do ï¿½ltimo objeto inserido.
 	 */
 	protected int getLastId()
 	{
@@ -33,8 +33,8 @@ public class Controller<T extends Model>
 	}
 
 	/**
-	 * Cria e retorna a instância da lista que será utilizada pela
-	 * variável models.
+	 * Cria e retorna a instï¿½ncia da lista que serï¿½ utilizada pela
+	 * variï¿½vel models.
 	 * 
 	 * @see foodlink.models
 	 * @return
@@ -90,4 +90,9 @@ public class Controller<T extends Model>
 		}
 		return null;
 	}
+
+        public T get(int idx)
+        {
+            return this.models.get(idx);
+        }
 }

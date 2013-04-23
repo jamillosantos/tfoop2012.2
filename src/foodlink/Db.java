@@ -11,6 +11,15 @@ public class Db
 	private TableController table;
 	private UserController user;
 
+        private static Db _instance = null;
+
+        public static Db instance()
+        {
+            if (_instance == null)
+                _instance = new Db();
+            return _instance;
+        }
+
 	public Db()
 	{
 		this.category = new CategoryController();
