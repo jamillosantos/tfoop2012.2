@@ -14,26 +14,44 @@ import java.util.List;
 import foodlink.models.Table;
 import javax.swing.table.DefaultTableModel;
 import foodlink.controllers.Collector;
+import foodlink.controllers.TableController;
 import foodlink.models.Category;
+import javax.swing.JTable;
 
 /**
  *
  * @author Eroneiffson
  */
-public class TableForm extends javax.swing.JFrame {
-    private Actions currentAction;
+public class TableForm extends CustomForm<Table, TableController> {
     /**
      * Creates new form TableForm
      */
-    public TableForm() {
-        initComponents();
-        this.setCurrentAction(Actions.insert);
+    public TableForm()
+    {}
 
-        // Popula a tabela de categorias
-        List<Table> tables = Db.instance().getTable().collect(new Collector<Table>());
-        DefaultTableModel model = (DefaultTableModel) tblListagem.getModel();
-        for (Table tab : tables)
-            model.addRow(new Object[] { tab.getCode() });
+    @Override
+    protected void initialize() {
+        initComponents();
+    }
+
+    @Override
+    protected TableController getController() {
+        return Db.instance().getTable();
+    }
+
+    @Override
+    protected Object[] createRow(Table model) {
+        return new Object[] { Integer.toString(model.getCode()) };
+    }
+
+    @Override
+    protected JTable getTblListagem() {
+        return this.tblListagem;
+    }
+
+    @Override
+    protected void clearForm() {
+        this.tfMesa.setText("");
     }
 
     /**
@@ -166,44 +184,11 @@ public class TableForm extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jbnNovoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbnNovoActionPerformed
-        this.tfMesa.setText("");
-        this.setCurrentAction(Actions.insert);
+        this.prepareToNew();
     }//GEN-LAST:event_jbnNovoActionPerformed
 
     private void jbnSalvarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbnSalvarActionPerformed
-    if (this.getCurrentAction().equals(Actions.insert))
-            {
-                try
-                {
-                    //Retorna uma instância de Category com o Nome que estiver no tfNome
-                    Table tab = this.getTableFromForm();
-                    //Adiciona a nova categoria no "BD
-                    Db.instance().getTable().insert(tab);
-                    ((DefaultTableModel) this.tblListagem.getModel()).addRow(new Object[] { tab.getCode() });
-                    this.tfMesa.setText("");
-                }
-                catch (ValidationException e)
-                {
-                    System.out.println(e.getErrors());
-
-                }
-            }
-            else if (this.getCurrentAction().equals(Actions.update))
-            {
-                try
-                {
-                    Db.instance().getTable().update(Db.instance().getTable().get(this.tblListagem.getSelectedRow()), this.getTableFromForm());
-                    ((DefaultTableModel) this.tblListagem.getModel()).setValueAt(this.tfMesa.getText(), this.tblListagem.getSelectedRow(), 0);
-                }
-                catch (ModelNotFoundException e)
-                {
-                    System.out.println(e.getMessage());
-                }
-                catch (ValidationException e)
-                {
-                    System.out.println(e.getErrors());
-                }
-            }        // 
+        this.save();
     }//GEN-LAST:event_jbnSalvarActionPerformed
 
     private void tfMesaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tfMesaActionPerformed
@@ -211,81 +196,13 @@ public class TableForm extends javax.swing.JFrame {
     }//GEN-LAST:event_tfMesaActionPerformed
 
     private void tblListagemMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblListagemMouseClicked
-       if (this.tblListagem.getSelectedRow() > -1)
-        {
-            this.tfMesa.setText(Integer.toString(Db.instance().getTable().get(this.tblListagem.getSelectedRow()).getCode()));
-            this.setCurrentAction(Actions.update);
-        }
+        this.tableToForm();
     }//GEN-LAST:event_tblListagemMouseClicked
 
     private void jbnApagarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbnApagarActionPerformed
-      //Apaga itme selecionado na lista
-        if (this.tblListagem.getSelectedRow() > -1)
-        {
-            try
-            {
-                Db.instance().getTable().remove(Db.instance().getTable().get(this.tblListagem.getSelectedRow()));
-                ((DefaultTableModel)this.tblListagem.getModel()).removeRow(this.tblListagem.getSelectedRow());
-            }
-            catch (ModelNotFoundException e)
-            {
-                System.out.println(e.getMessage());
-            }
-        }
-        else
-        {
-            System.out.println("Deu néga!");
-        }
+        this.remove();
     }//GEN-LAST:event_jbnApagarActionPerformed
-    public Actions getCurrentAction(){
-        return this.currentAction;
-    }
-    public void setCurrentAction(Actions value)
-    {
-        this.currentAction = value;
-    }
-    private Table getTableFromForm()
-    {
-         //Retorna uma instância de Category com o Nome que estiver no tfNome
-        Table t = new Table();
-        t.setCode(Integer.parseInt(this.tfMesa.getText()));
-        return t;
-    }
-    
-    /**
-     * @param args the command line arguments
-     */
-    public static void main(String args[]) {
-        /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
-        try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
-            }
-        } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(TableForm.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(TableForm.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(TableForm.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(TableForm.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        }
-        //</editor-fold>
 
-        /* Create and display the form */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                new TableForm().setVisible(true);
-            }
-        });
-    }
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel jLabel1;
     private javax.swing.JScrollPane jScrollPane1;
@@ -296,6 +213,20 @@ public class TableForm extends javax.swing.JFrame {
     private javax.swing.JTable tblListagem;
     private javax.swing.JFormattedTextField tfMesa;
     // End of variables declaration//GEN-END:variables
+
+    @Override
+    protected Table getModelFromForm()
+    {
+        Table model = new Table();
+        model.setCode(Integer.parseInt(this.tfMesa.getText()));
+        return model;
+    }
+
+    @Override
+    protected void modelToForm(Table model)
+    {
+        this.tfMesa.setText(Integer.toString(model.getCode()));
+    }
 
     
 

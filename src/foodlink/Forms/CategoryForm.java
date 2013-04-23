@@ -6,45 +6,33 @@ package foodlink.forms;
 
 import foodlink.Db;
 import foodlink.controllers.Actions;
+import foodlink.controllers.CategoryController;
 import foodlink.controllers.Collector;
+import foodlink.controllers.Controller;
 import foodlink.exceptions.ModelNotFoundException;
 import foodlink.exceptions.ValidationException;
 import foodlink.models.Category;
+import foodlink.models.Model;
 
 import java.util.List;
+import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 
 /**
  *
  * @author J. Santos
  */
-public class CategoryForm extends javax.swing.JFrame {
-    
-    private Actions currentAction;
-
+public class CategoryForm extends FoodLink.Forms.CustomForm<Category, CategoryController> {
     /**
      * Creates new form CategoryForm
      */
-    public CategoryForm() {
+    public CategoryForm()
+    {}
+
+    @Override
+    public void initialize()
+    {
         initComponents();
-        
-        this.setCurrentAction(Actions.insert);
-
-        // Popula a tabela de categorias
-        List<Category> categories = Db.instance().getCategory().collect(new Collector<Category>());
-        DefaultTableModel model = (DefaultTableModel) tblListagem.getModel();
-        for (Category cat : categories)
-            model.addRow(new Object[] { cat.getName() });
-    }
-
-    public Actions getCurrentAction()
-    {
-        return this.currentAction;
-    }
-
-    public void setCurrentAction(Actions value)
-    {
-        this.currentAction = value;
     }
 
     /**
@@ -167,116 +155,21 @@ public class CategoryForm extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnNovoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNovoActionPerformed
-        this.tfNome.setText("");
-        this.setCurrentAction(Actions.insert);
+        this.prepareToNew();
     }//GEN-LAST:event_btnNovoActionPerformed
 
     private void btnApagarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnApagarActionPerformed
-        //Apaga itme selecionado na lista
-        if (this.tblListagem.getSelectedRow() > -1)
-        {
-            try
-            {
-                Db.instance().getCategory().remove(Db.instance().getCategory().get(this.tblListagem.getSelectedRow()));
-                ((DefaultTableModel)this.tblListagem.getModel()).removeRow(this.tblListagem.getSelectedRow());
-            }
-            catch (ModelNotFoundException e)
-            {
-                System.out.println(e.getMessage());
-            }
-        }
-        else
-        {
-            System.out.println("Deu néga!");
-        }
+        this.remove();
     }//GEN-LAST:event_btnApagarActionPerformed
 
-    private Category getCategoryFromForm()
-    {
-         //Retorna uma instância de Category com o Nome que estiver no tfNome
-        Category c = new Category();
-        c.setName(this.tfNome.getText());
-        return c;
-    }
-    
     private void btnSalvarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSalvarActionPerformed
-        if (this.getCurrentAction().equals(Actions.insert))
-        {
-            try
-            {
-                //Retorna uma instância de Category com o Nome que estiver no tfNome
-                Category cat = this.getCategoryFromForm();
-                //Adiciona a nova categoria no "BD
-                Db.instance().getCategory().insert(cat);
-                ((DefaultTableModel) this.tblListagem.getModel()).addRow(new Object[] { cat.getName() });
-                this.tfNome.setText("");
-            }
-            catch (ValidationException e)
-            {
-                System.out.println(e.getErrors());
-                
-            }
-        }
-        else if (this.getCurrentAction().equals(Actions.update))
-        {
-            try
-            {
-                Db.instance().getCategory().update(Db.instance().getCategory().get(this.tblListagem.getSelectedRow()), this.getCategoryFromForm());
-                ((DefaultTableModel) this.tblListagem.getModel()).setValueAt(this.tfNome.getText(), this.tblListagem.getSelectedRow(), 0);
-            }
-            catch (ModelNotFoundException e)
-            {
-                System.out.println(e.getMessage());
-            }
-            catch (ValidationException e)
-            {
-                System.out.println(e.getErrors());
-            }
-        }
+        this.save();
     }//GEN-LAST:event_btnSalvarActionPerformed
 
     private void tblListagemMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblListagemMouseClicked
-        if (this.tblListagem.getSelectedRow() > -1)
-        {
-            this.tfNome.setText(Db.instance().getCategory().get(this.tblListagem.getSelectedRow()).getName());
-            this.setCurrentAction(Actions.update);
-        }
+        this.tableToForm();
     }//GEN-LAST:event_tblListagemMouseClicked
 
-    /**
-     * @param args the command line arguments
-     */
-    public static void main(String args[]) {
-        /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
-        try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
-            }
-        } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(CategoryForm.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(CategoryForm.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(CategoryForm.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(CategoryForm.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        }
-        //</editor-fold>
-
-        /* Create and display the form */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                new CategoryForm().setVisible(true);
-            }
-        });
-    }
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnApagar;
     private javax.swing.JButton btnNovo;
@@ -287,4 +180,36 @@ public class CategoryForm extends javax.swing.JFrame {
     private javax.swing.JTable tblListagem;
     private javax.swing.JTextField tfNome;
     // End of variables declaration//GEN-END:variables
+
+    @Override
+    protected CategoryController getController() {
+        return Db.instance().getCategory();
+    }
+
+    @Override
+    protected Object[] createRow(Category model) {
+        return new Object[] { model.getName() };
+    }
+
+    @Override
+    protected JTable getTblListagem() {
+        return this.tblListagem;
+    }
+
+    @Override
+    protected void clearForm() {
+        this.tfNome.setText("");
+    }
+
+    @Override
+    protected Category getModelFromForm() {
+        Category result = new Category();
+        result.setName(this.tfNome.getText());
+        return result;
+    }
+
+    @Override
+    protected void modelToForm(Category model) {
+        this.tfNome.setText(model.getName());
+    }
 }
